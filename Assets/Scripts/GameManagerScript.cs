@@ -5,16 +5,17 @@ using UnityEngine.UI;
 
 public class GameManagerScript : MonoBehaviour {
 
-    [HideInInspector]
-    public static int score;
-
     private static int totalCount = 4;
 
     private bool flag;
 
     private Vector2[] positions = new Vector2[totalCount];
 
+    [HideInInspector]
+    public static int score;
+
     public GameObject[] logos = new GameObject[totalCount];
+    public GameObject[] boxes = new GameObject[totalCount];
     public GameObject[] statements = new GameObject[totalCount];
             
     void Start()
@@ -30,19 +31,6 @@ public class GameManagerScript : MonoBehaviour {
         {
             CheckScore();
         }
-    }
-
-    void SetPositions()
-    {
-        List<int> randomList = GenerateRandomList();
-        for (int i = 0; i < totalCount; i++)
-        {
-            positions[i] = statements[i].GetComponent<RectTransform>().transform.position;
-        }
-        for (int i = 0; i < totalCount; i++)
-        {
-            statements[i].GetComponent<RectTransform>().transform.position = positions[randomList[i]];
-        }            
     }
 
     public List<int> GenerateRandomList()
@@ -64,7 +52,28 @@ public class GameManagerScript : MonoBehaviour {
         return list;
     }
 
-        void AssignStatements()
+    void SetPositions()
+    {
+        List<int> randomList = GenerateRandomList();
+        for (int i = 0; i < totalCount; i++)
+        {
+            positions[i] = statements[i].GetComponent<RectTransform>().transform.position;
+        }
+        for (int i = 0; i < totalCount; i++)
+        {
+            statements[i].GetComponent<RectTransform>().transform.position = positions[randomList[i]];
+        }
+        for (int i = 0; i < totalCount; i++)
+        {
+            positions[i] = boxes[i].GetComponent<RectTransform>().transform.position;
+        }
+        for (int i = 0; i < totalCount; i++)
+        {
+            boxes[i].GetComponent<RectTransform>().transform.position = positions[randomList[i]];
+        }
+    }
+
+    void AssignStatements()
     {
         for (int i = 0; i < totalCount; i++)
         {
@@ -142,10 +151,9 @@ public class GameManagerScript : MonoBehaviour {
 
         for (int i = 0; i < totalCount; i++)
         {
-            if (statements[i].transform.childCount > 0)
+            if (boxes[i].transform.childCount > 0)
             {
                 childrenCount++;
-                statements[i].transform.GetChild(0).transform.GetComponent<RectTransform>().localPosition = new Vector2(7500, 0);
             }
         }
         if (childrenCount == totalCount)
@@ -159,7 +167,7 @@ public class GameManagerScript : MonoBehaviour {
         score = 0;
         for (int i = 0; i < totalCount; i++)
         {
-            if (logos[i].transform.parent == statements[i].transform)
+            if (logos[i].transform.parent == boxes[i].transform)
             {
                 score++;
             }
